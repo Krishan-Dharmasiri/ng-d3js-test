@@ -5,12 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PieChartComponent } from './components/pie-chart/pie-chart.component';
 import { AreaChartComponent } from './components/area-chart/area-chart.component';
+import { StackedAreaChartComponent } from './components/stacked-area-chart/stacked-area-chart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PieChartComponent,
-    AreaChartComponent
+    AreaChartComponent,
+    StackedAreaChartComponent
   ],
   imports: [
     BrowserModule,
