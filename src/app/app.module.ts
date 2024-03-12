@@ -3,10 +3,14 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { PieChartComponent } from './components/pie-chart/pie-chart.component';
+import { AreaChartComponent } from './components/area-chart/area-chart.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PieChartComponent,
+    AreaChartComponent
   ],
   imports: [
     BrowserModule,
