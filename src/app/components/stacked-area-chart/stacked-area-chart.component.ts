@@ -36,8 +36,8 @@ export class StackedAreaChartComponent {
   private createStackedAreaChart() {
     // set the dimensions and margins of the graph
     const margin = { top: 20, right: 20, bottom: 50, left: 50 };
-    const width = 900 - margin.left - margin.right;
-    const height = 400 - margin.top - margin.bottom;
+    const width = 1000 - margin.left - margin.right;
+    const height = 600 - margin.top - margin.bottom;
 
     this.clearSVG();
 
@@ -63,7 +63,7 @@ export class StackedAreaChartComponent {
       .attr("text-anchor", "end")
       .attr("x", width)
       .attr("y", height + 40)
-      .text("Time");
+      .text("Period");
 
     // Add Y axis
     const y = d3.scaleLinear()
@@ -79,7 +79,7 @@ export class StackedAreaChartComponent {
       .attr("text-anchor", "end")
       .attr("x", 0)
       .attr("y", -5)
-      .text("Close Price")
+      .text("% Cars")
       .attr("text-anchor", "start")
 
     const stackedData = d3.stack<any>()
@@ -105,16 +105,36 @@ export class StackedAreaChartComponent {
 
     // Add a path to each data series
     series.append("path")
-      .style("fill", (d,i) => this.colors[i])
+      .style("fill", (d, i) => this.colors[i])
       .attr("d", (d) => area(d));
 
-       
+    // Adding legend
+    const legend = svg.selectAll('.legend')
+      .data(this.category_list)
+      .enter().append('g')
+      .attr('class', 'legend')
+      .attr('transform', (d, i) => 'translate(0,' + i * 20 + ')');
 
-  }
+    legend.append('rect')
+      .attr('x', width + 10)
+      .attr('y', 10)
+      .attr('width', 18)
+      .attr('height', 18)
+      .style('fill', (d: any, i) => this.colors[i]);
+
+    legend.append('text')
+      .attr('x', width + 35)
+      .attr('y', 19)
+      .attr('dy', '.35em')
+      .style('text-anchor', 'start')
+      .text((d: any) => d);
+  
+
+}
 
   private clearSVG() {
-    this.renderer.setProperty(
-      this.chartContainer.nativeElement, "innerHTML", ""
-    )
-  }
+  this.renderer.setProperty(
+    this.chartContainer.nativeElement, "innerHTML", ""
+  )
+}
 }

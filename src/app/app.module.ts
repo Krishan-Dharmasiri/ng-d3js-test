@@ -6,13 +6,15 @@ import { AppComponent } from './app.component';
 import { PieChartComponent } from './components/pie-chart/pie-chart.component';
 import { AreaChartComponent } from './components/area-chart/area-chart.component';
 import { StackedAreaChartComponent } from './components/stacked-area-chart/stacked-area-chart.component';
+import { StackedAreaChartV2Component } from './components/stacked-area-chart-v2/stacked-area-chart-v2.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PieChartComponent,
     AreaChartComponent,
-    StackedAreaChartComponent
+    StackedAreaChartComponent,
+    StackedAreaChartV2Component
   ],
   imports: [
     BrowserModule,
