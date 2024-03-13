@@ -2,7 +2,7 @@ import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import * as d3 from "d3";
 
 @Component({
-  selector: 'app-stacked-area-chart',
+  selector: 'stacked-area-chart',
   templateUrl: './stacked-area-chart.component.html',
   styleUrls: ['./stacked-area-chart.component.scss']
 })
@@ -14,26 +14,28 @@ export class StackedAreaChartComponent {
     'AAPL',
     'MSFT',
     'TSLA',
-    
+
   ]
 
+  colors = ["red", "green", "blue"];
+
   chartData = [
-    {date : new Date(2020, 1, 1), AAPL_close : 78, MSFT_close : 100, TSLA_close : 300},
-    {date : new Date(2021, 1, 1), AAPL_close : 79, MSFT_close : 105, TSLA_close : 295},
-    {date : new Date(2022, 1, 1), AAPL_close : 75, MSFT_close : 108, TSLA_close : 290},
-    {date : new Date(2023, 1, 1), AAPL_close : 80, MSFT_close : 110, TSLA_close : 297},
-    {date : new Date(2024, 1, 1), AAPL_close : 85, MSFT_close : 120, TSLA_close : 305}
+    { date: new Date(2020, 1, 1), AAPL: 75, MSFT: 100, TSLA: 300 },
+    { date: new Date(2021, 1, 1), AAPL: 100, MSFT: 105, TSLA: 100 },
+    { date: new Date(2022, 1, 1), AAPL: 50, MSFT: 108, TSLA: 150 },
+    { date: new Date(2023, 1, 1), AAPL: 150, MSFT: 110, TSLA: 297 },
+    { date: new Date(2024, 1, 1), AAPL: 125, MSFT: 120, TSLA: 75 }
   ]
 
   constructor(private renderer: Renderer2) { }
 
-  ngOnInit(){
+  ngOnInit() {
     this.createStackedAreaChart();
   }
 
-  private createStackedAreaChart(){
+  private createStackedAreaChart() {
     // set the dimensions and margins of the graph
-    const margin = { top: 20, right: 20, bottom: 50, left:50 };
+    const margin = { top: 20, right: 20, bottom: 50, left: 50 };
     const width = 900 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
@@ -46,7 +48,67 @@ export class StackedAreaChartComponent {
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    // Add X axis  dimensions
+    const x = d3.scaleTime()
+      .domain([d3.min(this.chartData, d => d.date) as Date, d3.max(this.chartData, d => d.date) as Date])
+      .range([0, width]);
 
+    // Add X axis to the chart
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).ticks(10))
+
+    // Add X axis label
+    svg.append("text")
+      .attr("text-anchor", "end")
+      .attr("x", width)
+      .attr("y", height + 40)
+      .text("Time");
+
+    // Add Y axis
+    const y = d3.scaleLinear()
+      .domain([0, 500])
+      .range([height, 0]);
+
+    // Add Y axis to the chart
+    svg.append("g")
+      .call(d3.axisLeft(y).ticks(5))
+
+    // Add Y axis label:
+    svg.append("text")
+      .attr("text-anchor", "end")
+      .attr("x", 0)
+      .attr("y", -5)
+      .text("Close Price")
+      .attr("text-anchor", "start")
+
+    const stackedData = d3.stack<any>()
+      .keys(this.category_list)(this.chartData);
+
+    const color_collection = d3.scaleOrdinal()
+      .domain(this.category_list)
+      .range(d3.schemeSet2);
+
+
+    // Area generator
+    const area = d3.area<any>()
+      .x((d) => x(d.data.date))
+      .y0((d) => y(d[0]))
+      .y1((d) => y(d[1]));
+
+    // Creating "g" tag for each data series     
+    const series = svg.selectAll("g.series")
+      .data(stackedData)
+      .enter()
+      .append("g")
+      .attr("class", "series");
+
+    // Add a path to each data series
+    series.append("path")
+      .style("fill", (d,i) => this.colors[i])
+      .attr("d", (d) => area(d));
+
+       
 
   }
 
