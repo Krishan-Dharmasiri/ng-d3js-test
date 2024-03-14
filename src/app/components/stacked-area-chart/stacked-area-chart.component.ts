@@ -2,12 +2,12 @@ import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import * as d3 from "d3";
 
 @Component({
-  selector: 'stacked-area-chart',
+  selector: 'stacked-area-chart-v1',
   templateUrl: './stacked-area-chart.component.html',
   styleUrls: ['./stacked-area-chart.component.scss']
 })
-export class StackedAreaChartComponent {
-  @ViewChild("stackedAreaChart", { static: true }) private chartContainer: ElementRef;
+export class StackedAreaChartV1Component {
+  @ViewChild("stackedAreaChartV1", { static: true }) private chartContainer: ElementRef;
 
   //List of groups
   category_list = [
@@ -89,7 +89,7 @@ export class StackedAreaChartComponent {
       .domain(this.category_list)
       .range(d3.schemeSet2);
 
-
+     
     // Area generator
     const area = d3.area<any>()
       .x((d) => x(d.data.date))
@@ -129,7 +129,7 @@ export class StackedAreaChartComponent {
       .style('text-anchor', 'start')
       .text((d: any) => d);
   
-
+    
 }
 
   private clearSVG() {
